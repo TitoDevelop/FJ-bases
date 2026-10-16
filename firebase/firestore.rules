@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function admin() {
+      return request.auth != null && request.auth.uid == 'REEMPLAZAR_POR_TU_ADMIN_UID';
+    }
+    match /beats/{beatId} {
+      allow get, list: if admin() || resource.data.published == true;
+      allow create, update, delete: if admin();
+    }
+    match /{document=**} {allow read, write: if false;}
+  }
+}
