@@ -7,6 +7,6 @@ binding = "MEDIA"
 bucket_name = "fernando-jover-media"
 
 [vars]
-FIREBASE_API_KEY = "TU_FIREBASE_WEB_API_KEY"
-ADMIN_UID = "TU_UID_DE_FIREBASE_AUTHENTICATION"
+FIREBASE_API_KEY = "AIzaSyB9iTH27As_KESXKByYUohnF3Cj96cxCLE"
+ADMIN_UID = "u93cWBnpitPQgUcgjUrfQEhH6Yq2"
 ALLOWED_ORIGIN = "http://localhost:4200"

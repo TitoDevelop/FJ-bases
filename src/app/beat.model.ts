@@ -1,8 +1,14 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface Beat {
  id:string; title:string; genre:string; bpm:number; musical_key:string;
  description:string|null; cover_key:string|null; preview_key:string|null;
- master_key:string|null; published:boolean; featured:boolean;
+ master_key?:string|null; published:boolean; featured:boolean;
  created_at:string;
+ price?:number;
+ previewUrl?:string; previewPublicId?:string; previewProtected?:boolean;
+ coverUrl?:string; coverPublicId?:string;
+ createdAt?:Timestamp; updatedAt?:Timestamp;
 }
 export const demoBeats: Beat[] = [
  {id:'demo-1',title:'AFTER HOURS',genre:'Trap',bpm:140,musical_key:'Am',description:'Dark tones / late night energy',cover_key:null,preview_key:null,master_key:null,published:true,featured:true,created_at:''},

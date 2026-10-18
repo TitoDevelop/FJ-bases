@@ -1,12 +1,21 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function admin() {
-      return request.auth != null && request.auth.uid == 'REEMPLAZAR_POR_TU_ADMIN_UID';
+    function admin() {return request.auth != null && request.auth.uid == 'u93cWBnpitPQgUcgjUrfQEhH6Yq2';}
+    function validBeat() {
+      let b = request.resource.data;
+      return b.title is string && b.title.size() > 0 && b.title.size() <= 160
+        && b.genre is string && b.bpm is number && b.bpm >= 1 && b.bpm <= 300
+        && b.published is bool
+        && (!b.published || (b.previewProtected == true &&
+          ((b.previewUrl is string && b.previewUrl.matches('https://res[.]cloudinary[.]com/aexezfok/video/upload/.*'))
+          || (b.preview_key is string && b.preview_key.matches('previews/[a-f0-9-]+[.]mp3')))))
+        && !('masterUrl' in b) && !('masterPublicId' in b);
     }
     match /beats/{beatId} {
       allow get, list: if admin() || resource.data.published == true;
-      allow create, update, delete: if admin();
+      allow create, update: if admin() && validBeat();
+      allow delete: if admin();
     }
     match /{document=**} {allow read, write: if false;}
   }

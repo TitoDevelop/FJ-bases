@@ -1,6 +1,15 @@
 [build]
 command = "npm run build"
 publish = "dist/fernando-jover-beats/browser"
+functions = "netlify/functions"
+[build.environment]
+NODE_VERSION = "22"
+[functions]
+node_bundler = "esbuild"
+[dev]
+command = "npm start -- --host 127.0.0.1"
+targetPort = 4200
+port = 8888
 [[redirects]]
 from = "/*"
 to = "/index.html"

@@ -6,3 +6,8 @@ dist/
 *.wav
 *.mp3
 .DS_Store
+
+.netlify/
+.env.*
+!.env.example
+*service-account*.json

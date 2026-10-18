@@ -1,6 +1,39 @@
 {
- "name":"fernando-jover-beats","version":"1.0.0","private":true,
- "scripts":{"start":"ng serve","build":"ng build","watch":"ng build --watch","typecheck":"tsc --noEmit"},
- "dependencies":{"@angular/animations":"~19.2.0","@angular/common":"~19.2.0","@angular/compiler":"~19.2.0","@angular/core":"~19.2.0","@angular/forms":"~19.2.0","@angular/platform-browser":"~19.2.0","@angular/router":"~19.2.0","firebase":"^11.10.0","lucide-angular":"^0.468.0","rxjs":"~7.8.0","tslib":"^2.3.0","zone.js":"~0.15.0"},
- "devDependencies":{"@angular-devkit/build-angular":"~19.2.0","@angular/cli":"~19.2.0","@angular/compiler-cli":"~19.2.0","typescript":"~5.8.2"}
+  "name": "fernando-jover-beats",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch",
+    "typecheck": "tsc --noEmit",
+    "dev:netlify": "netlify dev",
+    "test": "node --test tests/media.test.mjs tests/watermark.test.mjs",
+    "watermark": "node tools/watermark.mjs"
+  },
+  "dependencies": {
+    "@angular/animations": "~19.2.0",
+    "@angular/common": "~19.2.0",
+    "@angular/compiler": "~19.2.0",
+    "@angular/core": "~19.2.0",
+    "@angular/forms": "~19.2.0",
+    "@angular/platform-browser": "~19.2.0",
+    "@angular/router": "~19.2.0",
+    "firebase": "^11.10.0",
+    "lucide-angular": "^0.468.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0",
+    "firebase-admin": "^13.0.0",
+    "cloudinary": "^2.7.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~19.2.0",
+    "@angular/cli": "~19.2.0",
+    "@angular/compiler-cli": "~19.2.0",
+    "typescript": "~5.8.2"
+  },
+  "engines": {
+    "node": "22.x"
+  }
 }
