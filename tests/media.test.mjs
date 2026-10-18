@@ -32,3 +32,28 @@ test('cleanup cannot accept arbitrary public IDs',async()=>{const c=context();as
 test('cleanup refuses a ticket belonging to another user',async()=>{const c=context({ticket:{uid:'other',publicId,resourceType:'video'}});assert.equal((await cleanupUpload({ticketId},c)).status,403);assert.equal(c.state.destroyed,false);});
 test('cleanup preserves referenced catalogue assets',async()=>{const c=context({referenced:true});assert.equal((await cleanupUpload({ticketId},c)).status,409);assert.equal(c.state.destroyed,false);assert.equal(c.state.deleted,false);});
 test('cleanup removes only an owned unreferenced asset',async()=>{const c=context();assert.equal((await cleanupUpload({ticketId},c)).status,200);assert.equal(c.state.destroyed,true);assert.equal(c.state.deleted,true);});
+
+// Regression: Admin API omits duration unless extended media metadata is requested.
+test('complete requests media metadata to accept a valid audio upload',async()=>{
+  const c=context();let receivedOptions;
+  c.cloudinary.api.resource=async(id,options)=>{
+    receivedOptions=options;
+    return {public_id:publicId,resource_type:'video',format:'mp3',bytes:1024,duration:options.media_metadata===true?180:undefined,secure_url:'https://res.cloudinary.com/aexezfok/video/upload/v1/'+publicId+'.mp3'};
+  };
+  const response=await completeUpload({ticketId},c);
+  assert.equal(response.status,200);assert.equal(receivedOptions.media_metadata,true);assert.equal(receivedOptions.resource_type,'video');assert.equal(c.state.updated.verified,true);
+});
+test('missing duration reports unavailable metadata and never verifies the upload',async()=>{
+  const c=context({asset:{duration:undefined}});const response=await completeUpload({ticketId},c);
+  assert.equal(response.status,502);assert.match((await response.json()).error,/Cloudinary no ha devuelto una duración/);assert.equal(c.state.updated,null);
+});
+test('duration limit remains enforced with a specific message',async()=>{
+  const c=context({asset:{duration:1201}});const response=await completeUpload({ticketId},c);
+  assert.equal(response.status,415);assert.match((await response.json()).error,/supera el máximo de 20 minutos/);assert.equal(c.state.updated,null);
+});
+test('exact duration limit is accepted',async()=>{
+  const c=context({asset:{duration:1200}});assert.equal((await completeUpload({ticketId},c)).status,200);
+});
+test('missing file size cannot pass validation',async()=>{
+  const c=context({asset:{bytes:undefined}});assert.equal((await completeUpload({ticketId},c)).status,502);assert.equal(c.state.updated,null);
+});
